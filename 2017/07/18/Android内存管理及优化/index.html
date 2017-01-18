@@ -8,10 +8,10 @@
   <meta name="description" content="Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java内存管理">
-<meta property="og:url" content="https://xingchenfengn.github.io/2017/01/17/Java内存管理/index.html">
+<meta property="og:url" content="https://xingchenfengn.github.io/2017/07/18/Android内存管理及优化/index.html">
 <meta property="og:site_name" content="Morrowind">
 <meta property="og:description" content="Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成">
-<meta property="og:updated_time" content="2017-01-18T01:57:31.000Z">
+<meta property="og:updated_time" content="2017-01-18T05:35:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java内存管理">
 <meta name="twitter:description" content="Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成">
@@ -67,14 +67,14 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Java内存管理" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Android内存管理及优化" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/17/Java内存管理/" class="article-date">
-  <time datetime="2017-01-17T13:05:14.000Z" itemprop="datePublished">2017-01-17</time>
+    <a href="/2017/07/18/Android内存管理及优化/" class="article-date">
+  <time datetime="2017-07-18T02:09:23.000Z" itemprop="datePublished">2017-07-18</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Java/">Java</a>
+    <a class="article-category-link" href="/categories/Android/">Android</a>
   </div>
 
   </div>
@@ -94,10 +94,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成员变量里，在释放一些引用对象在需要回收时）。</p>
+<p>Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成员变量里，在释放一些引用对象在需要回收时）</p>
 </blockquote>
 <p>本文会解释Android是如何管理应用的内存分配，以及在开发Android应用的时候如何主动的减少内存的使用。</p>
-<p>#1、Android是如何管理内存的<br>Android的运行时（ART）和Dalvik虚拟机使用分页和内存映射（mmapping）来管理内存。这意味着，一个应用程序的任何内存修改，不管是通过分配新的对象还是触摸mmapped页，仍驻留在内存中，不能被调出。从应用程序释放内存的唯一方法是释放应用所持有的引用对象，使内存可用于垃圾收集器。有一个例外：没有修改mmapped中的任何文件，如代码，在系统在其他地方需要使用该内存时被换出RAM。</p>
+<h1 id="1、Android是如何管理内存的"><a href="#1、Android是如何管理内存的" class="headerlink" title="1、Android是如何管理内存的"></a>1、Android是如何管理内存的</h1><p>Android的运行时（ART）和Dalvik虚拟机使用分页和内存映射（mmapping）来管理内存。这意味着，一个应用程序的任何内存修改，不管是通过分配新的对象还是触摸mmapped页，仍驻留在内存中，不能被调出。从应用程序释放内存的唯一方法是释放应用所持有的引用对象，使内存可用于垃圾收集器。有一个例外：没有修改mmapped中的任何文件，如代码，在系统在其他地方需要使用该内存时被换出RAM。</p>
 <p><strong>1. Garbage collection（垃圾回收）</strong><br>一个管理内存的环境，如ART或Dalvik虚拟机，跟踪每一个内存分配。一旦它确定一块存储器不再被使用的程序，它释放回堆，不需要开发者的任何干预。对于托管内存环境中回收未使用的内存的机制被称为Garbage collection（垃圾回收）垃圾回收有两个目标：找到程序里未来不能被访问的对象并回收这些对象所使用的资源。</p>
 <p> <strong>2.shared memory(共享内存)</strong><br>为了适应在RAM中需要的一切，Android尝试共享跨进程内存的pages。它可以通过以下方式做到：</p>
 <ul>
@@ -124,7 +124,7 @@
 <p> <strong>5、切换应用</strong></p>
 <p>当用户切换两个应用时，Android会把那些不是前台的应用（）放在 least-recently used （LRU）cache里。比如说当用户第一次启动app时，系统就会为他创建一个进程，但是当用户退出应用是，之前创建的进程并没有退出，系统将进程缓存起来，当用户再返回到应用时，系统就会重用这个进程，这样会让应用切换的更快。</p>
 <p>如果你的应用有一个被缓存的进程，虽然它没有被使用，但它仍被保留在内存中，这会影响系统的整体性能。当系统开始进入低内存状态时，它会杀掉Lrucache中最近使用最低的进程，系统也会把进程所占用的内存进行释放。</p>
-<p>#2、应用如何管理内存<br>一些Android特性、Java类和代码结构倾向于使用更多的内存。我们可以通过提高代码的效率来减少应用程序对内存的使用</p>
+<h1 id="2、应用如何管理内存"><a href="#2、应用如何管理内存" class="headerlink" title="2、应用如何管理内存"></a>2、应用如何管理内存</h1><p>一些Android特性、Java类和代码结构倾向于使用更多的内存。我们可以通过提高代码的效率来减少应用程序对内存的使用</p>
 <ul>
 <li><p><strong>减少Service的使用</strong><br>当我们需要启动一个Service进行后来操作时，只有当需要服务执行操作时再启动服务，当服务执行完毕时要及时销毁服务，否在我们在不经意间就会造成内存泄漏。当一个Service已经不需要了却没有销毁是最糟糕的一个内存管理错误。让一个不需要运行的服务运行是最糟糕的一种内存管理错误。</p>
 <p>当我们启动一个服务时，系统会倾向于一直保持服务所在的Process，这使得Service所在的Process非常浪费，因为系统没法把Service里所占用的没有用的RAM给其他的Process，这减少了系统能够缓存的进程的数量，使应用间的切换更加低效。它甚至会导致系统内存不稳定，不能够维持正在运行的服务。</p>
@@ -156,9 +156,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://xingchenfengn.github.io/2017/01/17/Java内存管理/" data-id="ciy2aa1ss0000gpfy60l915jk" class="article-share-link">Share</a>
+      <a data-url="https://xingchenfengn.github.io/2017/07/18/Android内存管理及优化/" data-id="ciy2imifn00006dfys7ljee1q" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存管理/">内存管理</a></li></ul>
+
     </footer>
   </div>
   
@@ -184,22 +186,36 @@
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a></li></ul>
     </div>
   </div>
 
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/内存管理/">内存管理</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
     </div>
   </div>
 
@@ -212,7 +228,7 @@
       <ul>
         
           <li>
-            <a href="/2017/01/17/Java内存管理/">Java内存管理</a>
+            <a href="/2017/07/18/Android内存管理及优化/">Java内存管理</a>
           </li>
         
           <li>

@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Java内存管理 | Morrowind</title>
+  <title>Android内存管理机制与优化 | Morrowind</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成">
+  <meta name="description" content="Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成员">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java内存管理">
-<meta property="og:url" content="https://xingchenfengn.github.io/2017/07/18/Android内存管理及优化/index.html">
+<meta property="og:title" content="Android内存管理机制与优化">
+<meta property="og:url" content="https://xingchenfengn.github.io/2017/01/18/Android内存管理及优化/index.html">
 <meta property="og:site_name" content="Morrowind">
-<meta property="og:description" content="Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成">
-<meta property="og:updated_time" content="2017-01-18T05:35:51.000Z">
+<meta property="og:description" content="Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成员">
+<meta property="og:updated_time" content="2017-01-18T09:50:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java内存管理">
-<meta name="twitter:description" content="Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成">
+<meta name="twitter:title" content="Android内存管理机制与优化">
+<meta name="twitter:description" content="Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成员">
   
     <link rel="alternate" href="/atom.xml" title="Morrowind" type="application/atom+xml">
   
@@ -69,8 +69,8 @@
       <div class="outer">
         <section id="main"><article id="post-Android内存管理及优化" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/07/18/Android内存管理及优化/" class="article-date">
-  <time datetime="2017-07-18T02:09:23.000Z" itemprop="datePublished">2017-07-18</time>
+    <a href="/2017/01/18/Android内存管理及优化/" class="article-date">
+  <time datetime="2017-01-18T02:09:23.000Z" itemprop="datePublished">2017-01-18</time>
 </a>
     
   <div class="article-category">
@@ -85,7 +85,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Java内存管理
+      Android内存管理机制与优化
     </h1>
   
 
@@ -93,9 +93,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成员变量里，在释放一些引用对象在需要回收时）</p>
-</blockquote>
+        <p>Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成员变量里，在释放一些引用对象在需要回收时）</p>
+<a id="more"></a>
 <p>本文会解释Android是如何管理应用的内存分配，以及在开发Android应用的时候如何主动的减少内存的使用。</p>
 <h1 id="1、Android是如何管理内存的"><a href="#1、Android是如何管理内存的" class="headerlink" title="1、Android是如何管理内存的"></a>1、Android是如何管理内存的</h1><p>Android的运行时（ART）和Dalvik虚拟机使用分页和内存映射（mmapping）来管理内存。这意味着，一个应用程序的任何内存修改，不管是通过分配新的对象还是触摸mmapped页，仍驻留在内存中，不能被调出。从应用程序释放内存的唯一方法是释放应用所持有的引用对象，使内存可用于垃圾收集器。有一个例外：没有修改mmapped中的任何文件，如代码，在系统在其他地方需要使用该内存时被换出RAM。</p>
 <p><strong>1. Garbage collection（垃圾回收）</strong><br>一个管理内存的环境，如ART或Dalvik虚拟机，跟踪每一个内存分配。一旦它确定一块存储器不再被使用的程序，它释放回堆，不需要开发者的任何干预。对于托管内存环境中回收未使用的内存的机制被称为Garbage collection（垃圾回收）垃圾回收有两个目标：找到程序里未来不能被访问的对象并回收这些对象所使用的资源。</p>
@@ -156,7 +155,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://xingchenfengn.github.io/2017/07/18/Android内存管理及优化/" data-id="ciy2j23w00001hqfy7129lmxj" class="article-share-link">Share</a>
+      <a data-url="https://xingchenfengn.github.io/2017/01/18/Android内存管理及优化/" data-id="ciy2qcpq100019kfyy0u7na5v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存管理/">内存管理</a></li></ul>
@@ -166,6 +165,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2017/01/18/Hexo更改LandScape主题样式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Hexo更改LandScape主题样式
+        
+      </div>
+    </a>
   
   
     <a href="/2017/01/17/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
@@ -196,7 +204,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/内存管理/">内存管理</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo主题/">Hexo主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Landscape/">Landscape</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/内存管理/">内存管理</a></li></ul>
     </div>
   </div>
 
@@ -206,7 +214,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a>
+      <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/Hexo主题/" style="font-size: 10px;">Hexo主题</a> <a href="/tags/Landscape/" style="font-size: 10px;">Landscape</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a>
     </div>
   </div>
 
@@ -215,7 +223,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
     </div>
   </div>
 
@@ -228,7 +236,11 @@
       <ul>
         
           <li>
-            <a href="/2017/07/18/Android内存管理及优化/">Java内存管理</a>
+            <a href="/2017/01/18/Hexo更改LandScape主题样式/">Hexo更改LandScape主题样式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/18/Android内存管理及优化/">Android内存管理机制与优化</a>
           </li>
         
           <li>
@@ -262,7 +274,14 @@
 </nav>
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="http://apps.bdimg.com/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof jQuery == 'undefined') {
+  document.write(unescape("%3Cscript src='/js/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+}
+// ]]>
+</script>
 
 
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">

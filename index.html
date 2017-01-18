@@ -68,10 +68,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Hexo更改LandScape主题样式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/18/Hexo更改LandScape主题样式/" class="article-date">
+  <time datetime="2017-01-18T09:42:45.000Z" itemprop="datePublished">2017-01-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/18/Hexo更改LandScape主题样式/">Hexo更改LandScape主题样式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近用Hexo创建了了个人博客，倒腾了一天终于配置好了，主题选来选去觉得Hexo默认的主题LandScape就好挺好用，所以也就准备用默认主题，但是在用这个主题的时候也发现几点不好用的地方，比如文章引用，它默认的是居中显示的，特别不习惯，就在网上搜了一些改LandScape主题的一些方法，在这里做一总结。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/18/Hexo更改LandScape主题样式/#more">阅读全文</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://xingchenfengn.github.io/2017/01/18/Hexo更改LandScape主题样式/" data-id="ciy2rdh7z0000f1fyrs7550qz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo主题/">Hexo主题</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Landscape/">Landscape</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android内存管理及优化" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/07/18/Android内存管理及优化/" class="article-date">
-  <time datetime="2017-07-18T02:09:23.000Z" itemprop="datePublished">2017-07-18</time>
+    <a href="/2017/01/18/Android内存管理及优化/" class="article-date">
+  <time datetime="2017-01-18T02:09:23.000Z" itemprop="datePublished">2017-01-18</time>
 </a>
     
   <div class="article-category">
@@ -86,7 +133,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/18/Android内存管理及优化/">Java内存管理</a>
+      <a class="article-title" href="/2017/01/18/Android内存管理及优化/">Android内存管理机制与优化</a>
     </h1>
   
 
@@ -94,70 +141,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成员变量里，在释放一些引用对象在需要回收时）</p>
-</blockquote>
-<p>本文会解释Android是如何管理应用的内存分配，以及在开发Android应用的时候如何主动的减少内存的使用。</p>
-<h1 id="1、Android是如何管理内存的"><a href="#1、Android是如何管理内存的" class="headerlink" title="1、Android是如何管理内存的"></a>1、Android是如何管理内存的</h1><p>Android的运行时（ART）和Dalvik虚拟机使用分页和内存映射（mmapping）来管理内存。这意味着，一个应用程序的任何内存修改，不管是通过分配新的对象还是触摸mmapped页，仍驻留在内存中，不能被调出。从应用程序释放内存的唯一方法是释放应用所持有的引用对象，使内存可用于垃圾收集器。有一个例外：没有修改mmapped中的任何文件，如代码，在系统在其他地方需要使用该内存时被换出RAM。</p>
-<p><strong>1. Garbage collection（垃圾回收）</strong><br>一个管理内存的环境，如ART或Dalvik虚拟机，跟踪每一个内存分配。一旦它确定一块存储器不再被使用的程序，它释放回堆，不需要开发者的任何干预。对于托管内存环境中回收未使用的内存的机制被称为Garbage collection（垃圾回收）垃圾回收有两个目标：找到程序里未来不能被访问的对象并回收这些对象所使用的资源。</p>
-<p> <strong>2.shared memory(共享内存)</strong><br>为了适应在RAM中需要的一切，Android尝试共享跨进程内存的pages。它可以通过以下方式做到：</p>
-<ul>
-<li>每一个app的process都是从Zygote(受精卵)的进程中fork出来的。Zygote进程在系统启动并且加载通用的framework的代码与资源（比如ActivityThemes）时开始启动。为了启动一个新的程序进程，系统会fork Zygote进程生成一个新的process，然后在新的process中加载并运行app的代码。这使得大多数的RAM pages被用来分配给framework的代码与资源，并在应用的所有进程中进行共享。</li>
-<li><p>大多数static的数据被映射到一个进程中。这种方式可以使数据不仅能够在进程间进行共享，而且使得它能够在需要的时候被paged out。例如下面几种static的数据:</p>
-<ul>
-<li><p>Dalvik code (by placing it in a pre-linked .odex file for direct mmapping</p>
-</li>
-<li><p>App resources (by designing the resource table to be a structure that can              be mmapped and by aligning the zip entries of the APK)</p>
-</li>
-<li><p>Traditional project elements like native code in .so files.</p>
-</li>
-<li><p>在很多地方，Android通过分配的共享内存(例如ashmem（匿名共享内存）或者gralloc)来实现跨进程共享内存。例如，window surfaces在app与screen compositor之间使用共享的内存，cursor buffers在content provider与client之间使用共享的内存。</p>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>3.分配和回收应用内存</strong><br>每一个应用进程的Dalvik 都与一个虚拟的内存范围（heapSize）。这定义了一个了了逻辑堆的大小（heapSize），它可以随着需要增长至系统为每个应用设定的大小限制。</p>
-<p>  heapSize和实际物理上的内存数量是不等的。当检查app的堆时，Android会计算Proportional Set Size（PSS）的值，PSS是实际共享的内存大小，记录了那些和其他进程进行共享的内存。</p>
-<p>  Dalvik堆和逻辑堆得大小（heapSize）并不吻合，这意味着Android并没有使用碎片处理去关闭空闲区域。Android只有当堆末端有没用的空间时才能收缩逻辑堆大小（heapsize）,但系统仍然可以减少堆所占用的物理内存大小。在垃圾回收之后，Dalvik会遍历heap并找出不使用的pages，然后使用madvise把那些pages返回给kernal。因此，成对的allocations与deallocations大块的数据可以使得物理内存能够被正常的回收。然而，回收碎片化的内存则会使得效率低下很多，因为那些碎片化的分配页面也许会被其他地方所共享到。</p>
-<p> <strong>4. 限制应用的内存</strong></p>
-<p>为了维持多任务的功能环境，Android为每一个app都设置了一个硬性的heap size限制。确切的heapsize限制随着设备可用的RAM大小而有差异，如果app的heapSize已经达到了最大限制而尝试分配更多的内存就会引起<a href="https://developer.android.com/reference/java/lang/OutOfMemoryError.html" target="_blank" rel="external">OutOfMemoryError</a>，</p>
-<p>如果想要查询当前设备的heap size限制大小是多少，然后决定cache的大小。可以通过 <a href="https://developer.android.com/reference/android/app/ActivityManager.html#getMemoryClass(" target="_blank" rel="external">getMemoryClass()</a>)来查询。这个方法会返回一个整数，表明你的app heap size限制是多少。<br>也可以通过手机目录system&gt;build.prop文件查看</p>
-<p> <strong>5、切换应用</strong></p>
-<p>当用户切换两个应用时，Android会把那些不是前台的应用（）放在 least-recently used （LRU）cache里。比如说当用户第一次启动app时，系统就会为他创建一个进程，但是当用户退出应用是，之前创建的进程并没有退出，系统将进程缓存起来，当用户再返回到应用时，系统就会重用这个进程，这样会让应用切换的更快。</p>
-<p>如果你的应用有一个被缓存的进程，虽然它没有被使用，但它仍被保留在内存中，这会影响系统的整体性能。当系统开始进入低内存状态时，它会杀掉Lrucache中最近使用最低的进程，系统也会把进程所占用的内存进行释放。</p>
-<h1 id="2、应用如何管理内存"><a href="#2、应用如何管理内存" class="headerlink" title="2、应用如何管理内存"></a>2、应用如何管理内存</h1><p>一些Android特性、Java类和代码结构倾向于使用更多的内存。我们可以通过提高代码的效率来减少应用程序对内存的使用</p>
-<ul>
-<li><p><strong>减少Service的使用</strong><br>当我们需要启动一个Service进行后来操作时，只有当需要服务执行操作时再启动服务，当服务执行完毕时要及时销毁服务，否在我们在不经意间就会造成内存泄漏。当一个Service已经不需要了却没有销毁是最糟糕的一个内存管理错误。让一个不需要运行的服务运行是最糟糕的一种内存管理错误。</p>
-<p>当我们启动一个服务时，系统会倾向于一直保持服务所在的Process，这使得Service所在的Process非常浪费，因为系统没法把Service里所占用的没有用的RAM给其他的Process，这减少了系统能够缓存的进程的数量，使应用间的切换更加低效。它甚至会导致系统内存不稳定，不能够维持正在运行的服务。</p>
-<p>一般情况下应该尽量少使用持久性的Service,因为它一直需要占用内存。谷歌推荐我们使用 <a href="https://developer.android.com/reference/android/app/job/JobScheduler.html" target="_blank" rel="external">JobScheduler</a>和 <a href="https://developer.android.com/reference/android/app/IntentService.html" target="_blank" rel="external">IntentService</a>（当处理完Intent后会自动停止）。</p>
-</li>
-<li><p><strong>使用高效的数据容器</strong><br>编程语言提供的一些类在移动设备上用效率并不是很高，例如使用HashMap就会是内存效率很低，因为它每一个映射都需要一个单独的实例。<br>Android框架包括几个高效的数据容器,包括 <a href="https://developer.android.com/reference/android/util/SparseArray.html" target="_blank" rel="external">SparseArray</a>, <a href="https://developer.android.com/reference/android/util/SparseBooleanArray.html" target="_blank" rel="external">SparseBooleanArray</a><br>和 <a href="https://developer.android.com/reference/android/support/v4/util/LongSparseArray.html" target="_blank" rel="external">LongSparseArray</a>.<br>例如,SparseArray类更有效,因为他们避免系统的需要而去对key和value（有时会创建两个）进行autobox（自动装箱）。</p>
-</li>
-<li><p><strong>注意代码抽象</strong><br>开发人员通常使用抽象仅仅作为一个良好的编程实践,因为抽象可以提高代码的灵活性和维护。然而,抽象代价巨大:通常需要大量更多的需要执行的代码,需要更多的时间和更多的RAM代码映射到内存中。如果你的抽象类不提供一个重要的作用,你应该避免他们。</p>
-</li>
-<li><p><strong>使用nano protobufs序列化数据</strong><br><a href="https://developers.google.com/protocol-buffers/docs/overview" target="_blank" rel="external">Protocol buffers</a>是由谷歌设计用于序列化结构化数据的语言中立的,与平台无关的,可扩展的机制，和 XML类似，但是更小，更快，更简单。如果你决定让你的代码使用nano protobufs ，你应该一直使用nano protobufs在你的客户端代码里。常规protobufs生成非常冗长的代码,这可能会导致应用产生多种问题比如说增加了内存的使用,增加APK大小,执行慢。</p>
-</li>
-<li><p><strong>避免内存流失</strong><br> 正如前面所说的，垃圾回收机制并不影响app的性能。然而许多耗时很短的垃圾回收events能够迅速吃掉你的帧时间。系统花费在垃圾回收上的时间越多，它去做其它事情的时间就越少，比如渲染或者音频流。</p>
-<p>通常，内存流失会引起大量的垃圾回收事件，在实践中，内存流失描述了在指定时间内分配的临时对象的数量。</p>
-<p>例如，你可能会内分配多个临时对象在一个for循环里，或者在onDraw方法里创建Paint或者是Bitmap。这两种情况，都是快速的产生了大量的对象，这些都能很快消耗内存，迫使出现一个垃圾回收事件。</p>
-<p>所以我们需要找到代码流失比较高的地方，这样才能解决问题。推荐使用 <a href="https://developer.android.com/topic/performance/memory.html#AnalyzeRam" target="_blank" rel="external">Analyze your RAM usage</a>工具找内存流失的地方。</p>
-</li>
-<li><p><strong> 移除掉内存占用比较多的资源和库</strong><br>我们的代码里可能会有一些吞噬内存的资源和库却不让我们知道。Apk的整体规模包括第三方的库和或者嵌入的资源会影响app内存的占用。你可以从你的代码中删除任何多余的，不必要的或臃肿的组件来提高应用程序的内存消耗。</p>
-</li>
-<li><p><strong> 减少Apk的大小</strong><br>减少APk的整体规模都能够显著的降低app的内存占用。Bitmap的大小，资源，帧动画和第三方库都会影响apk的大小。AndroidStudio和AndroidSDK提供了多种工具来帮助您降低资源和外部依赖的大小。详情可以查看<a href="https://developer.android.com/topic/performance/reduce-apk-size.html" target="_blank" rel="external">Reduce APK Size</a>.</p>
-</li>
-<li><p><strong>谨慎使用依赖注入框架</strong><br>依赖注入框架如Guice或RoboGuice可以简化你写的代码，并提供一个自适应环境，这是测试和其他配置更改非常有用。然而，依赖框架并不总是为移动设备优化。</p>
-<p>例如，这些框架往往通过扫描你的代码注解初始化过程。这可需要大量代码不必要地映射到RAM中。系统分配这些映射到clean区让Android可以删除它们，这些只有当这些映射存在很长一段时间后才会发生。。。<br>如果我们需要注解框架，可以使用 <a href="http://google.github.io/dagger/" target="_blank" rel="external">Dagger</a>框架，Dagger没有使用反射扫描应用的代码。Dagger的严格执行意味着它可以在Android应用中使用，而不增加不必要的内存使用情况。</p>
-</li>
-<li><p><strong>谨慎使用扩展类库</strong><br>扩展类库的代码往往不是为移动环境而编写的，当被用在移动客户端上工作时可能比较低效。当您决定使用一个外部库，您可能需要为移动设备优化该库。计划这项工作的前期，并决定在所有使用它之前分析代码大小和内存占用方面的库。</p>
-</li>
-</ul>
-<p>原文链接：<br><a href="https://developer.android.com/topic/performance/memory.html" target="_blank" rel="external">https://developer.android.com/topic/performance/memory.html</a><br><a href="https://developer.android.com/topic/performance/memory-overview.html" target="_blank" rel="external">https://developer.android.com/topic/performance/memory-overview.html</a></p>
-
+        <p>Random Access Memory(RAM)在任何软件开发环境中都是非常重要的资源，但在物理内存通常很有限的移动操作系统上更为重要。尽管Android Runtime (ART)和Dalvik虚拟机扮演了垃圾回收的角色，但这并不意味着我们可以忽略应用的内存分配与释放的时机和位置。我们也需要避免引入Memory Leaks（内存泄漏，通常由于在Gm需要回收一些释放对象时扔持有对象引用在静态成员变量里，在释放一些引用对象在需要回收时）</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/18/Android内存管理及优化/#more">阅读全文</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://xingchenfengn.github.io/2017/07/18/Android内存管理及优化/" data-id="ciy2j23w00001hqfy7129lmxj" class="article-share-link">Share</a>
+      <a data-url="https://xingchenfengn.github.io/2017/01/18/Android内存管理及优化/" data-id="ciy2qcpq100019kfyy0u7na5v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存管理/">内存管理</a></li></ul>
@@ -195,9 +188,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-</blockquote>
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
@@ -210,7 +201,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://xingchenfengn.github.io/2017/01/17/hello-world/" data-id="ciy2j23vv0000hqfy447uen08" class="article-share-link">Share</a>
+      <a data-url="https://xingchenfengn.github.io/2017/01/17/hello-world/" data-id="ciy2qcppx00009kfyr2iif5jo" class="article-share-link">Share</a>
       
       
     </footer>
@@ -239,7 +230,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/内存管理/">内存管理</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo主题/">Hexo主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Landscape/">Landscape</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/内存管理/">内存管理</a></li></ul>
     </div>
   </div>
 
@@ -249,7 +240,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a>
+      <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/Hexo主题/" style="font-size: 10px;">Hexo主题</a> <a href="/tags/Landscape/" style="font-size: 10px;">Landscape</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a>
     </div>
   </div>
 
@@ -258,7 +249,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
     </div>
   </div>
 
@@ -271,7 +262,11 @@
       <ul>
         
           <li>
-            <a href="/2017/07/18/Android内存管理及优化/">Java内存管理</a>
+            <a href="/2017/01/18/Hexo更改LandScape主题样式/">Hexo更改LandScape主题样式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/18/Android内存管理及优化/">Android内存管理机制与优化</a>
           </li>
         
           <li>
@@ -305,7 +300,14 @@
 </nav>
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="http://apps.bdimg.com/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof jQuery == 'undefined') {
+  document.write(unescape("%3Cscript src='/js/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+}
+// ]]>
+</script>
 
 
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android实现屏幕自动旋转 | Morrowind</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在做一个视频客户端项目，有一个功能是，视频要实现自动旋转功能，在这里做一简单的总结。实现起来很简单，几行代码就能够搞定。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android实现屏幕自动旋转">
+<meta property="og:url" content="https://xingchenfengn.github.io/2017/02/06/Android实现屏幕自动旋转/index.html">
+<meta property="og:site_name" content="Morrowind">
+<meta property="og:description" content="最近在做一个视频客户端项目，有一个功能是，视频要实现自动旋转功能，在这里做一简单的总结。实现起来很简单，几行代码就能够搞定。">
+<meta property="og:updated_time" content="2017-02-06T07:49:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android实现屏幕自动旋转">
+<meta name="twitter:description" content="最近在做一个视频客户端项目，有一个功能是，视频要实现自动旋转功能，在这里做一简单的总结。实现起来很简单，几行代码就能够搞定。">
+  
+    <link rel="alternate" href="/atom.xml" title="Morrowind" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Morrowind</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Read the fucking source code</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://xingchenfengn.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android实现屏幕自动旋转" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/06/Android实现屏幕自动旋转/" class="article-date">
+  <time datetime="2017-02-06T07:43:22.000Z" itemprop="datePublished">2017-02-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android实现屏幕自动旋转
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个视频客户端项目，有一个功能是，视频要实现自动旋转功能，在这里做一简单的总结。实现起来很简单，几行代码就能够搞定。</p>
+<a id="more"></a>
+<p>直接看代码</p>
+<h3 id="1、继承OrientationEventListener类监听手机的旋转"><a href="#1、继承OrientationEventListener类监听手机的旋转" class="headerlink" title="1、继承OrientationEventListener类监听手机的旋转"></a>1、继承OrientationEventListener类监听手机的旋转</h3><p>这里用到的是OrientationEventListener类，它是当手机屏幕旋转时从SensorManger接受通知的助手类。新建一个类继承OrientationEventListener，如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyOrientoinListener</span> <span class="keyword">extends</span> <span class="title">OrientationEventListener</span> </span>&#123;</div><div class="line"></div><div class="line">       <span class="function"><span class="keyword">public</span> <span class="title">MyOrientoinListener</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line">           <span class="keyword">super</span>(context);</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       <span class="function"><span class="keyword">public</span> <span class="title">MyOrientoinListener</span><span class="params">(Context context, <span class="keyword">int</span> rate)</span> </span>&#123;</div><div class="line">           <span class="keyword">super</span>(context, rate);</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       <span class="meta">@Override</span></div><div class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onOrientationChanged</span><span class="params">(<span class="keyword">int</span> orientation)</span> </span>&#123;</div><div class="line">           Log.d(TAG, <span class="string">"orention"</span> + orientation);</div><div class="line">           <span class="keyword">int</span> screenOrientation = getResources().getConfiguration().orientation;</div><div class="line">           <span class="keyword">if</span> (((orientation &gt;= <span class="number">0</span>) &amp;&amp; (orientation &lt; <span class="number">45</span>)) || (orientation &gt; <span class="number">315</span>)) &#123;<span class="comment">//设置竖屏</span></div><div class="line">               <span class="keyword">if</span> (screenOrientation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT &amp;&amp; orientation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) &#123;</div><div class="line">                   Log.d(TAG, <span class="string">"设置竖屏"</span>);</div><div class="line">                   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);</div><div class="line">                   oriBtn.setText(<span class="string">"竖屏"</span>);</div><div class="line">               &#125;</div><div class="line">           &#125; <span class="keyword">else</span> <span class="keyword">if</span> (orientation &gt; <span class="number">225</span> &amp;&amp; orientation &lt; <span class="number">315</span>) &#123; <span class="comment">//设置横屏</span></div><div class="line">               Log.d(TAG, <span class="string">"设置横屏"</span>);</div><div class="line">               <span class="keyword">if</span> (screenOrientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) &#123;</div><div class="line">                   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);</div><div class="line">                   oriBtn.setText(<span class="string">"横屏"</span>);</div><div class="line">               &#125;</div><div class="line">           &#125; <span class="keyword">else</span> <span class="keyword">if</span> (orientation &gt; <span class="number">45</span> &amp;&amp; orientation &lt; <span class="number">135</span>) &#123;<span class="comment">// 设置反向横屏</span></div><div class="line">               Log.d(TAG, <span class="string">"反向横屏"</span>);</div><div class="line">               <span class="keyword">if</span> (screenOrientation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) &#123;</div><div class="line">                   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);</div><div class="line">                   oriBtn.setText(<span class="string">"反向横屏"</span>);</div><div class="line">               &#125;</div><div class="line">           &#125; <span class="keyword">else</span> <span class="keyword">if</span> (orientation &gt; <span class="number">135</span> &amp;&amp; orientation &lt; <span class="number">225</span>) &#123;</div><div class="line">               Log.d(TAG, <span class="string">"反向竖屏"</span>);</div><div class="line">               <span class="keyword">if</span> (screenOrientation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) &#123;</div><div class="line">                   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);</div><div class="line">                   oriBtn.setText(<span class="string">"反向竖屏"</span>);</div><div class="line">               &#125;</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h3 id="2、在Activity中开启自动旋转"><a href="#2、在Activity中开启自动旋转" class="headerlink" title="2、在Activity中开启自动旋转"></a>2、在Activity中开启自动旋转</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">myOrientoinListener = <span class="keyword">new</span> MyOrientoinListener(<span class="keyword">this</span>);</div><div class="line"><span class="keyword">boolean</span> autoRotateOn = (android.provider.Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, <span class="number">0</span>) == <span class="number">1</span>);</div><div class="line"><span class="comment">//检查系统是否开启自动旋转</span></div><div class="line"><span class="keyword">if</span> (autoRotateOn) &#123;</div><div class="line">    myOrientoinListener.enable();</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h3 id="3、Activity销毁时在onDesotry里取消监听"><a href="#3、Activity销毁时在onDesotry里取消监听" class="headerlink" title="3、Activity销毁时在onDesotry里取消监听"></a>3、Activity销毁时在onDesotry里取消监听</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onDestroy();</div><div class="line">    <span class="comment">//销毁时取消监听</span></div><div class="line">    myOrientoinListener.disable();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样就实现了屏幕自动旋转的功能了，很简单有木有！</p>
+<p>Demo地址：<a href="https://github.com/xingchenfengn/ScreenAutoRotateDemo.git" target="_blank" rel="external">https://github.com/xingchenfengn/ScreenAutoRotateDemo.git</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://xingchenfengn.github.io/2017/02/06/Android实现屏幕自动旋转/" data-id="ciytspjcq0002sxfyooc3b1mt" class="article-share-link">Share</a>
+      
+        <a href="https://xingchenfengn.github.io/2017/02/06/Android实现屏幕自动旋转/#disqus_thread" class="article-comment-link">留言</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/屏幕旋转/">屏幕旋转</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/19/Hexo添加评论功能/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hexo添加评论功能</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  
+ 
+ <section id="comments">
+   <!--  start -->
+   <div class="ds-thread" data-thread-key="post-Android实现屏幕自动旋转" data-title="Android实现屏幕自动旋转" data-url="https://xingchenfengn.github.io/2017/02/06/Android实现屏幕自动旋转/"></div>
+   <!--  end -->
+   <!-- JS start () -->
+   <script type="text/javascript">
+   var duoshuoQuery = {short_name:'xingzhiqiao'};
+     (function() {
+       var ds = document.createElement('script');
+       ds.type = 'text/javascript';ds.async = true;
+       ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+       ds.charset = 'UTF-8';
+       (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+     </script>
+   <!-- JS end -->
+ </section>
+ </section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo主题/">Hexo主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Landscape/">Landscape</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/内存管理/">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/屏幕旋转/">屏幕旋转</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/添加评论/">添加评论</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Hexo主题/" style="font-size: 20px;">Hexo主题</a> <a href="/tags/Landscape/" style="font-size: 20px;">Landscape</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a> <a href="/tags/屏幕旋转/" style="font-size: 10px;">屏幕旋转</a> <a href="/tags/添加评论/" style="font-size: 10px;">添加评论</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/06/Android实现屏幕自动旋转/">Android实现屏幕自动旋转</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/19/Hexo添加评论功能/">Hexo添加评论功能</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/18/Hexo更改LandScape主题样式/">Hexo更改LandScape主题样式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/18/Android内存管理及优化/">Android内存管理机制与优化</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/17/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 fengty<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'reqianduan';
+  
+  var disqus_url = 'https://xingchenfengn.github.io/2017/02/06/Android实现屏幕自动旋转/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="http://apps.bdimg.com/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof jQuery == 'undefined') {
+  document.write(unescape("%3Cscript src='/js/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+}
+// ]]>
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
